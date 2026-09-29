@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Моё настроение</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+            background: linear-gradient(135deg, #f5eaff, #e9f4ff);
+
+            color: #333;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 600px;
+
+            background: rgba(255, 255, 255, 0.92);
+
+            padding: 40px;
+
+            border-radius: 30px;
+
+            box-shadow: 0 15px 40px rgba(80, 60, 120, 0.15);
+
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 32px;
+            color: #4b4266;
+        }
+
+        .subtitle {
+            color: #777;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        button {
+            border: none;
+            padding: 18px 12px;
+            border-radius: 18px;
+
+            background: #f5f2ff;
+
+            font-size: 17px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+
+            background: #ebe5ff;
+
+            box-shadow: 0 8px 20px rgba(80, 60, 120, 0.12);
+        }
+
+        .scale {
+            margin-top: 30px;
+        }
+
+        .scale input {
+            width: 100%;
+        }
+
+        .number {
+            font-size: 42px;
+
+            font-weight: 600;
+
+            color: #6b5aa6;
+
+            margin: 15px 0;
+        }
+
+        .next {
+            margin-top: 25px;
+
+            background: #6b5aa6;
+
+            color: white;
+
+            width: 100%;
+        }
+
+        .next:hover {
+            background: #5c4c91;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #result {
+            margin-top: 25px;
+
+            font-size: 19px;
+
+            line-height: 1.6;
+
+            color: #4b4266;
+        }
+
+        .restart {
+            margin-top: 25px;
+
+            background: #f0ecff;
+        }
+
+        @media (max-width: 500px) {
+
+            .card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="card">
+
+
+        <!-- ШАГ 1 -->
+
+        <div id="step1">
+
+            <h1>Как ты себя чувствуешь?</h1>
+
+            <p class="subtitle">
+                Выбери эмоцию, которая сейчас ближе всего к твоему состоянию
+            </p>
+
+            <div class="buttons">
+
+                <button onclick="chooseEmotion('Радость 💛')">
+                    😊 Радость
+                </button>
+
+                <button onclick="chooseEmotion('Спокойствие 😌')">
+                    😌 Спокойствие
+                </button>
+
+                <button onclick="chooseEmotion('Грусть 💙')">
+                    😢 Грусть
+                </button>
+
+                <button onclick="chooseEmotion('Злость ❤️‍🔥')">
+                    😡 Злость
+                </button>
+
+                <button onclick="chooseEmotion('Тревога 💜')">
+                    😰 Тревога
+                </button>
+
+                <button onclick="chooseEmotion('Не понимаю 🤍')">
+                    🤷 Не понимаю
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ШАГ 2 -->
+
+        <div id="step2" class="hidden">
+
+            <h1>Насколько сильно?</h1>
+
+            <p class="subtitle" id="emotionText"></p>
+
+            <div class="scale">
+
+                <p>1 — совсем немного</p>
+
+                <div class="number" id="number">
+                    5
+                </div>
+
+                <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    value="5"
+                    id="intensity"
+                    oninput="updateNumber()"
+                >
+
+                <p>10 — очень сильно</p>
+
+            </div>
+
+            <button class="next" onclick="nextStep()">
+                Продолжить →
+            </button>
+
+        </div>
+
+
+        <!-- ШАГ 3 -->
+
+        <div id="step3" class="hidden">
+
+            <h1>Что могло вызвать это чувство?</h1>
+
+            <p class="subtitle">
+                Выбери то, что сейчас кажется наиболее подходящим
+            </p>
+
+            <div class="buttons">
+
+                <button onclick="chooseCause('Люди и отношения 🧑‍🤝‍🧑')">
+                    🧑‍🤝‍🧑 Люди и отношения
+                </button>
+
+                <button onclick="chooseCause('Учёба или работа 📚')">
+                    📚 Учёба или работа
+                </button>
+
+                <button onclick="chooseCause('Дом и семья 🏠')">
+                    🏠 Дом и семья
+                </button>
+
+                <button onclick="chooseCause('Мысли о будущем 💭')">
+                    💭 Мысли о будущем
+                </button>
+
+                <button onclick="chooseCause('Мысли о себе 🪞')">
+                    🪞 Мысли о себе
+                </button>
+
+                <button onclick="chooseCause('Ситуация вокруг меня 🌍')">
+                    🌍 Ситуация вокруг меня
+                </button>
+
+                <button onclick="chooseCause('Я не знаю ❓')">
+                    ❓ Я не знаю
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ШАГ 4 -->
+
+        <div id="step4" class="hidden">
+
+            <h1>Что тебе сейчас нужно?</h1>
+
+            <p class="subtitle">
+                Выбери то, чего тебе больше всего хочется сейчас
+            </p>
+
+            <div class="buttons">
+
+                <button onclick="chooseNeed('Поддержка 🤗')">
+                    🤗 Поддержка
+                </button>
+
+                <button onclick="chooseNeed('Спокойствие 🧘')">
+                    🧘 Спокойствие
+                </button>
+
+                <button onclick="chooseNeed('Поговорить с кем-то 💬')">
+                    💬 Поговорить с кем-то
+                </button>
+
+                <button onclick="chooseNeed('Разобраться в ситуации 🧩')">
+                    🧩 Разобраться
+                </button>
+
+                <button onclick="chooseNeed('Отдохнуть 💤')">
+                    💤 Отдохнуть
+                </button>
+
+                <button onclick="chooseNeed('Что-то изменить 🚀')">
+                    🚀 Что-то изменить
+                </button>
+
+                <button onclick="chooseNeed('Пока не знаю 🤷')">
+                    🤷 Пока не знаю
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ИТОГ -->
+
+        <div id="step5" class="hidden">
+
+            <h1>Твой результат 🤍</h1>
+
+            <p id="result"></p>
+
+            <button class="restart" onclick="restart()">
+                Пройти ещё раз
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+    <script>
+
+        let selectedEmotion = "";
+
+        let intensity = 5;
+
+        let selectedCause = "";
+
+        let selectedNeed = "";
+
+
+        function chooseEmotion(emotion) {
+
+            selectedEmotion = emotion;
+
+            document.getElementById("emotionText").textContent =
+                "Ты выбрала: " + emotion;
+
+            document.getElementById("step1").classList.add("hidden");
+
+            document.getElementById("step2").classList.remove("hidden");
+
+        }
+
+
+        function updateNumber() {
+
+            intensity =
+                document.getElementById("intensity").value;
+
+            document.getElementById("number").textContent =
+                intensity;
+
+        }
+
+
+        function nextStep() {
+
+            document.getElementById("step2").classList.add("hidden");
+
+            document.getElementById("step3").classList.remove("hidden");
+
+        }
+
+
+        function chooseCause(cause) {
+
+            selectedCause = cause;
+
+            document.getElementById("step3").classList.add("hidden");
+
+            document.getElementById("step4").classList.remove("hidden");
+
+        }
+
+
+       function chooseNeed(need) {
+    selectedNeed = need;
+
+    let reflection = "";
+
+    if (selectedEmotion.includes("Тревога")) {
+        if (intensity >= 8) {
+            reflection = "Похоже, сейчас это чувство довольно сильное. Возможно, тебе будет полезно немного замедлиться, сделать паузу и не требовать от себя решения всего сразу.";
+        } else {
+            reflection = "Похоже, сейчас есть некоторое напряжение. Иногда помогает немного отстраниться от ситуации и посмотреть на неё спокойнее.";
+        }
+    }
+
+    else if (selectedEmotion.includes("Грусть")) {
+        if (intensity >= 8) {
+            reflection = "Похоже, грусть сейчас занимает много места. Не обязательно сразу пытаться её убрать — иногда сначала важно дать себе немного времени и поддержки.";
+        } else {
+            reflection = "Похоже, сейчас тебе немного грустно. Возможно, тебе поможет что-то спокойное и приятное, что даст возможность переключиться.";
+        }
+    }
+
+    else if (selectedEmotion.includes("Злость")) {
+        if (intensity >= 8) {
+            reflection = "Сейчас эмоция довольно сильная. Возможно, сначала стоит дать себе немного пространства и времени, прежде чем разбираться с причиной.";
+        } else {
+            reflection = "Похоже, что-то тебя задело или раздражает. Иногда полезно сначала понять, что именно вызвало реакцию.";
+        }
+    }
+
+    else if (selectedEmotion.includes("Радость")) {
+        reflection = "Похоже, сейчас у тебя хорошее настроение. Можно попробовать сохранить это ощущение и заметить, что именно принесло тебе радость.";
+    }
+
+    else if (selectedEmotion.includes("Спокойствие")) {
+        reflection = "Похоже, сейчас ты чувствуешь себя достаточно спокойно. Это хороший момент, чтобы заметить, что помогает тебе сохранять такое состояние.";
+    }
+
+    else {
+        reflection = "Иногда бывает сложно сразу понять, что именно мы чувствуем. И это нормально. Можно просто немного понаблюдать за своим состоянием.";
+    }
+
+    document.getElementById("step4").classList.add("hidden");
+    document.getElementById("step5").classList.remove("hidden");
+
+    document.getElementById("result").innerHTML =
+        "Сейчас ты чувствуешь <strong>" + selectedEmotion + "</strong>.<br><br>" +
+        "Интенсивность этого чувства — <strong>" + intensity + " из 10</strong>.<br><br>" +
+        "Возможная причина: <strong>" + selectedCause + "</strong>.<br><br>" +
+        "Тебе сейчас хочется: <strong>" + selectedNeed + "</strong>.<br><br>" +
+        "<em>" + reflection + "</em>";
+}
+
+
+        function restart() {
+
+            selectedEmotion = "";
+
+            intensity = 5;
+
+            selectedCause = "";
+
+            selectedNeed = "";
+
+            document.getElementById("intensity").value = 5;
+
+            document.getElementById("number").textContent = 5;
+
+            document.getElementById("step5").classList.add("hidden");
+
+            document.getElementById("step1").classList.remove("hidden");
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
